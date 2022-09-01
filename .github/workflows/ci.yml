@@ -1,0 +1,27 @@
+name: CI
+on: push
+
+
+env:
+  JDK_VERSION: '18'
+
+
+jobs:
+  build:
+    name: Build (Ubuntu)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - uses: AdoptOpenJDK/install-jdk@v1
+        with:
+          version: ${{ env.JDK_VERSION }}
+
+      - name: Gradle Build
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build -Psnapshot --info -S --show-version
+          gradle-home-cache-cleanup: true
