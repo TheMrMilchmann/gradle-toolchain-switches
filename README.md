@@ -28,6 +28,13 @@ the runtime that is used to execute the build.
 > [Learn more about Gradle's properties.](https://docs.gradle.org/current/userguide/build_environment.html)
 
 
+## Compatibility Map
+
+| Gradle | Minimal plugin version |
+|--------|------------------------|
+| 7.4    | 0.1.0                  |
+
+
 ## Building from source
 
 ### Setup
