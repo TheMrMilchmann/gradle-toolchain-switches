@@ -42,9 +42,13 @@ class ToolchainSwitchesPluginTest extends Specification {
     File buildFile
     File settingsFile
 
+    String junitVersion
+
     def setup() {
         buildFile = new File(projectDir, "build.gradle")
         settingsFile = new File(projectDir, "settings.gradle")
+
+        junitVersion = System.getenv("junitVersion")
     }
 
     @Unroll
@@ -76,8 +80,8 @@ class ToolchainSwitchesPluginTest extends Specification {
             }
             
             dependencies {
-                testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0' 
-                testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+                testImplementation 'org.junit.jupiter:junit-jupiter-api:$junitVersion' 
+                testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:$junitVersion'
             }
         """.stripIndent()
 
@@ -120,8 +124,8 @@ class ToolchainSwitchesPluginTest extends Specification {
             }
             
             dependencies {
-                testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0' 
-                testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+                testImplementation 'org.junit.jupiter:junit-jupiter-api:$junitVersion' 
+                testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:$junitVersion'
             }
         """.stripIndent()
 
@@ -158,8 +162,8 @@ class ToolchainSwitchesPluginTest extends Specification {
             }
             
             dependencies {
-                testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0' 
-                testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+                testImplementation 'org.junit.jupiter:junit-jupiter-api:$junitVersion' 
+                testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:$junitVersion'
             }
         """.stripIndent()
 

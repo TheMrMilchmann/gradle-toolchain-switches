@@ -71,6 +71,10 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
+
+        doFirst {
+            environment("junitVersion", libs.versions.junit.get())
+        }
     }
 }
 
