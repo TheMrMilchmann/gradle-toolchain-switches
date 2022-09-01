@@ -55,7 +55,7 @@ kotlin {
 gradlePlugin {
     plugins {
         create("toolchainswitches") {
-            id = "io.github.themrmilchmann.toolchainswitches"
+            id = "io.github.themrmilchmann.toolchain-switches"
             displayName = "Gradle Toolchain Switches Plugin"
             description = "A Gradle plugin that adds command line parameters that may be used to dynamically switch between toolchains for specific tasks."
 
