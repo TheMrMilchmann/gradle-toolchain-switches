@@ -7,11 +7,13 @@ on:
 
 env:
   JDK_VERSION: '18'
+  WORKSPACE_ARCHIVE: workspace.tar
+  WORKSPACE_ARTIFACT: build-results
 
 
 jobs:
   build:
-    name: Build (Ubuntu)
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -23,8 +25,71 @@ jobs:
         with:
           version: ${{ env.JDK_VERSION }}
 
-      - name: Gradle Build
+      - name: Gradle Assemble
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build -Psnapshot --info -S --show-version
+          arguments: assemble -Psnapshot --info -S --show-version
           gradle-home-cache-cleanup: true
+
+      - name: Tar files
+        run: tar -cvf ${{ env.WORKSPACE_ARCHIVE }} .
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.WORKSPACE_ARTIFACT }}
+          path: ${{ env.WORKSPACE_ARCHIVE }}
+          retention-days: 1
+
+
+  check:
+    name: Check
+    strategy:
+      matrix:
+        jdk: [ 8, 11, 17, 18 ]
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.WORKSPACE_ARTIFACT }}
+          path: .
+
+      - name: Untar
+        run: |
+          tar -xvf ${{ env.WORKSPACE_ARCHIVE }}
+          rm ${{ env.WORKSPACE_ARCHIVE }}
+
+      - uses: AdoptOpenJDK/install-jdk@v1
+        with:
+          version: ${{ env.JDK_VERSION }}
+
+      - name: Gradle Check
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: check -Psnapshot --info -S --show-version -Ptoolchain.test.version=${{ matrix.jdk }}
+          gradle-home-cache-cleanup: true
+
+
+  # So, what's happening here?
+  #
+  # Basically, restoring the workspace state between jobs is incredibly annoying.
+  # We can get reasonable support by using the upload-/download-artifact
+  # actions, but they suffer from a severe limitation:
+  # GH Actions has a storage limit and the minimum retention is 24 hours...
+  #
+  # Since the storage quota is limited, we have to make sure that the artifact
+  # is removed. Unfortunately, there is no official way to do this, so we resort
+  # to a third party action for now.
+  #
+  # See also: https://github.com/actions/upload-artifact/issues/290
+  cleanup:
+    name: Cleanup
+    if: ${{ always() }}
+    needs: ['check']
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cleanup
+        uses: GeekyEggo/delete-artifact@56e063d7d8bf9972ac54aca4454d3a6675917f44
+        with:
+          name: ${{ env.WORKSPACE_ARTIFACT }}
