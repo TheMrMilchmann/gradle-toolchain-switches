@@ -23,6 +23,7 @@ package io.github.themrmilchmann.gradle.toolchainswitches.plugins
 
 import io.github.themrmilchmann.gradle.toolchainswitches.internal.utils.*
 import org.gradle.api.*
+import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.JavaExec
@@ -49,24 +50,26 @@ public class ToolchainSwitchesPlugin : Plugin<Project> {
     }
 
     override fun apply(target: Project): Unit = applyTo(target) project@{
-        val java = the<JavaPluginExtension>()
-        val javaToolchains = the<JavaToolchainService>()
+        plugins.withType<JavaBasePlugin> {
+            val java = the<JavaPluginExtension>()
+            val javaToolchains = the<JavaToolchainService>()
 
-        tasks {
-            withType<JavaCompile>().configureEach {
-                javaCompiler.set(inferCompiler(name, defaultToolchain = java.toolchain, javaToolchains))
-            }
+            tasks {
+                withType<JavaCompile>().configureEach {
+                    javaCompiler.set(inferCompiler(name, defaultToolchain = java.toolchain, javaToolchains))
+                }
 
-            withType<JavaExec>().configureEach {
-                javaLauncher.set(inferLauncher(name, defaultToolchain = java.toolchain, javaToolchains))
-            }
+                withType<JavaExec>().configureEach {
+                    javaLauncher.set(inferLauncher(name, defaultToolchain = java.toolchain, javaToolchains))
+                }
 
-            withType<Javadoc>().configureEach {
-                javadocTool.set(inferJavadocTool(name, defaultToolchain = java.toolchain, javaToolchains))
-            }
+                withType<Javadoc>().configureEach {
+                    javadocTool.set(inferJavadocTool(name, defaultToolchain = java.toolchain, javaToolchains))
+                }
 
-            withType<Test>().configureEach {
-                javaLauncher.set(inferLauncher(name, defaultToolchain = java.toolchain, javaToolchains))
+                withType<Test>().configureEach {
+                    javaLauncher.set(inferLauncher(name, defaultToolchain = java.toolchain, javaToolchains))
+                }
             }
         }
     }
