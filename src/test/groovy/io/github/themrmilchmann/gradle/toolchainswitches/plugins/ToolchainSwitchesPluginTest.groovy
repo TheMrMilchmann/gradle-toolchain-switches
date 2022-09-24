@@ -57,8 +57,8 @@ class ToolchainSwitchesPluginTest extends Specification {
         writeTest(toolchainVersion)
         buildFile << """\
             plugins {
-                id 'java-library'
                 id 'io.github.themrmilchmann.toolchain-switches'
+                id 'java-library'
             }
             
             java {
