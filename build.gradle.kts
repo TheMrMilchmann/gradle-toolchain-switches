@@ -52,11 +52,15 @@ kotlin {
 }
 
 gradlePlugin {
+    website.set("https://github.com/TheMrMilchmann/gradle-toolchain-switches")
+    vcsUrl.set("https://github.com/TheMrMilchmann/gradle-toolchain-switches.git")
+
     plugins {
         create("toolchainswitches") {
             id = "io.github.themrmilchmann.toolchain-switches"
             displayName = "Gradle Toolchain Switches Plugin"
             description = "A Gradle plugin that adds command line parameters that may be used to dynamically switch between toolchains for specific tasks."
+            tags.addAll("cli", "configuration", "java", "toolchains")
 
             implementationClass = "io.github.themrmilchmann.gradle.toolchainswitches.plugins.ToolchainSwitchesPlugin"
         }
@@ -95,13 +99,6 @@ publishing {
             description.set("A Gradle plugin that adds command line parameters that may be used to dynamically switch between toolchains for specific tasks.")
         }
     }
-}
-
-pluginBundle {
-    website = "https://github.com/TheMrMilchmann/gradle-toolchain-switches"
-    vcsUrl = "https://github.com/TheMrMilchmann/gradle-toolchain-switches.git"
-
-    tags = listOf("cli", "configuration", "java", "toolchains")
 }
 
 signing {
