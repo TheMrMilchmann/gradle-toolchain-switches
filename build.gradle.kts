@@ -19,17 +19,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import com.github.themrmilchmann.build.*
-import com.github.themrmilchmann.build.BuildType
+import io.github.themrmilchmann.build.*
+import io.github.themrmilchmann.build.BuildType
 import org.jetbrains.kotlin.gradle.tasks.*
 
 plugins {
     groovy
     `java-test-fixtures`
     `kotlin-dsl`
-    `maven-publish`
-    signing
     alias(libs.plugins.plugin.publish)
+    id("io.github.themrmilchmann.maven-publish-conventions")
 }
 
 group = "io.github.themrmilchmann.gradle.toolchainswitches"
@@ -84,16 +83,6 @@ val emptyJar = tasks.create<Jar>("emptyJar") {
 }
 
 publishing {
-    repositories {
-        maven {
-            url = uri(deployment.repo)
-
-            credentials {
-                username = deployment.user
-                password = deployment.password
-            }
-        }
-    }
     publications.withType<MavenPublication> {
         if (name == "toolchainswitchesPluginMarkerMaven") {
             artifact(emptyJar)
@@ -104,33 +93,6 @@ publishing {
         pom {
             name.set("Gradle Toolchain Switches Plugin")
             description.set("A Gradle plugin that adds command line parameters that may be used to dynamically switch between toolchains for specific tasks.")
-            packaging = "jar"
-            url.set("https://github.com/TheMrMilchmann/gradle-toolchain-switches")
-
-            licenses {
-                licenses {
-                    license {
-                        name.set("MIT")
-                        url.set("https://github.com/TheMrMilchmann/gradle-toolchain-switches/blob/master/LICENSE")
-                        distribution.set("repo")
-                    }
-                }
-            }
-
-            developers {
-                developer {
-                    id.set("TheMrMilchmann")
-                    name.set("Leon Linhart")
-                    email.set("themrmilchmann@gmail.com")
-                    url.set("https://github.com/TheMrMilchmann")
-                }
-            }
-
-            scm {
-                connection.set("scm:git:git://github.com/TheMrMilchmann/gradle-toolchain-switches.git")
-                developerConnection.set("scm:git:git://github.com/TheMrMilchmann/gradle-toolchain-switches.git")
-                url.set("https://github.com/TheMrMilchmann/gradle-toolchain-switches.git")
-            }
         }
     }
 }
