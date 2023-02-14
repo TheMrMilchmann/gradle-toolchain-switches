@@ -31,13 +31,6 @@ plugins {
     id("io.github.themrmilchmann.maven-publish-conventions")
 }
 
-group = "io.github.themrmilchmann.gradle.toolchainswitches"
-val nextVersion = "0.3.0"
-version = when (deployment.type) {
-    BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
-    else -> nextVersion
-}
-
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(8))
@@ -99,15 +92,6 @@ publishing {
             description.set("A Gradle plugin that adds command line parameters that may be used to dynamically switch between toolchains for specific tasks.")
         }
     }
-}
-
-signing {
-    isRequired = (deployment.type === BuildType.RELEASE)
-    sign(publishing.publications)
-}
-
-repositories {
-    mavenCentral()
 }
 
 dependencies {

@@ -22,7 +22,7 @@
 import io.github.themrmilchmann.build.*
 import io.github.themrmilchmann.build.BuildType
 
-group = "com.gw2tb.launcher"
+group = "io.github.themrmilchmann.gradle.toolchainswitches"
 
 val nextVersion = "0.3.0"
 version = when (deployment.type) {
