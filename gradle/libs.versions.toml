@@ -1,6 +1,6 @@
 [versions]
 junit = "5.9.1"
-plugin-publish = "1.0.0"
+plugin-publish = "1.1.0"
 spock = "2.2-groovy-3.0"
 
 
