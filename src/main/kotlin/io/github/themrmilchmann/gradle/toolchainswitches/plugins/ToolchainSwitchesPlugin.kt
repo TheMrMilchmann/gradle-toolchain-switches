@@ -50,24 +50,24 @@ public class ToolchainSwitchesPlugin : Plugin<Project> {
     }
 
     override fun apply(target: Project): Unit = applyTo(target) project@{
-        plugins.withType<JavaBasePlugin> {
-            val java = the<JavaPluginExtension>()
-            val javaToolchains = the<JavaToolchainService>()
+        plugins.withType(JavaBasePlugin::class.java) {
+            val java = extensions.getByType(JavaPluginExtension::class.java)
+            val javaToolchains = extensions.getByType(JavaToolchainService::class.java)
 
-            tasks {
-                withType<JavaCompile>().configureEach {
+            applyTo(tasks) {
+                withType(JavaCompile::class.java).configureEach {
                     javaCompiler.set(inferCompiler(name, defaultToolchain = java.toolchain, javaToolchains))
                 }
 
-                withType<JavaExec>().configureEach {
+                withType(JavaExec::class.java).configureEach {
                     javaLauncher.set(inferLauncher(name, defaultToolchain = java.toolchain, javaToolchains))
                 }
 
-                withType<Javadoc>().configureEach {
+                withType(Javadoc::class.java).configureEach {
                     javadocTool.set(inferJavadocTool(name, defaultToolchain = java.toolchain, javaToolchains))
                 }
 
-                withType<Test>().configureEach {
+                withType(Test::class.java).configureEach {
                     javaLauncher.set(inferLauncher(name, defaultToolchain = java.toolchain, javaToolchains))
                 }
             }
