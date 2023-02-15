@@ -36,7 +36,6 @@ import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.jvm.toolchain.JavaToolchainSpec
 import org.gradle.jvm.toolchain.JavadocTool
-import org.gradle.kotlin.dsl.*
 
 public class ToolchainSwitchesPlugin : Plugin<Project> {
 
