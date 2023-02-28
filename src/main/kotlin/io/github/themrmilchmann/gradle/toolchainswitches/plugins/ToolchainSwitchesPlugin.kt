@@ -23,7 +23,6 @@ package io.github.themrmilchmann.gradle.toolchainswitches.plugins
 
 import io.github.themrmilchmann.gradle.toolchainswitches.internal.utils.*
 import org.gradle.api.*
-import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.JavaExec
@@ -49,7 +48,7 @@ public class ToolchainSwitchesPlugin : Plugin<Project> {
     }
 
     override fun apply(target: Project): Unit = applyTo(target) {
-        plugins.withType(JavaBasePlugin::class.java) {
+        pluginManager.withPlugin("org.gradle.java") {
             val java = extensions.getByType(JavaPluginExtension::class.java)
             val javaToolchains = extensions.getByType(JavaToolchainService::class.java)
 
