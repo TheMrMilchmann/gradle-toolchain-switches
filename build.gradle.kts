@@ -61,16 +61,13 @@ gradlePlugin {
 }
 
 tasks {
-    withType<KotlinCompile> {
-        kotlinOptions.freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
-    }
-
-    withType<Test> {
+    named<Test>("test").configure {
         useJUnitPlatform()
 
-        doFirst {
-            environment("junitVersion", libs.versions.junit.get())
-        }
+        systemProperty("junit.jupiter.execution.parallel.enabled", true)
+        systemProperty("junit.jupiter.execution.parallel.mode.default", "concurrent")
+
+        environment("junitVersion", libs.versions.junit.get())
     }
 }
 
@@ -95,6 +92,8 @@ publishing {
 }
 
 dependencies {
-    testFixturesApi(platform(libs.spock.bom))
-    testFixturesApi(libs.spock.core)
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.jupiter.params)
+    testRuntimeOnly(libs.junit.jupiter.engine)
 }
