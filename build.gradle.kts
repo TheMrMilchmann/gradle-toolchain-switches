@@ -24,9 +24,9 @@ import io.github.themrmilchmann.build.BuildType
 import org.jetbrains.kotlin.gradle.tasks.*
 
 plugins {
-    groovy
-    `java-test-fixtures`
-    `kotlin-dsl`
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.plugin.samwithreceiver)
+    alias(libs.plugins.gradle.plugin.functional.test)
     alias(libs.plugins.plugin.publish)
     id("io.github.themrmilchmann.maven-publish-conventions")
 }
@@ -45,6 +45,10 @@ kotlin {
 }
 
 gradlePlugin {
+    compatibility {
+        minimumGradleVersion.set("7.4")
+    }
+
     website.set("https://github.com/TheMrMilchmann/gradle-toolchain-switches")
     vcsUrl.set("https://github.com/TheMrMilchmann/gradle-toolchain-switches.git")
 
@@ -58,6 +62,10 @@ gradlePlugin {
             implementationClass = "io.github.themrmilchmann.gradle.toolchainswitches.plugins.ToolchainSwitchesPlugin"
         }
     }
+}
+
+samWithReceiver {
+    annotation("org.gradle.api.HasImplicitReceiver")
 }
 
 tasks {
