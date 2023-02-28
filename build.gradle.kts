@@ -47,7 +47,7 @@ kotlin {
     target {
         compilations.all {
             compilerOptions.configure {
-                apiVersion.set(KotlinVersion.KOTLIN_1_4)
+                apiVersion.set(KotlinVersion.KOTLIN_1_8)
                 languageVersion.set(KotlinVersion.KOTLIN_1_8)
             }
         }
@@ -55,18 +55,6 @@ kotlin {
         compilations.named("main").configure {
             compilerOptions.configure {
                 apiVersion.set(KotlinVersion.KOTLIN_1_4)
-            }
-        }
-
-        compilations.named("test").configure {
-            compilerOptions.configure {
-                apiVersion.set(KotlinVersion.KOTLIN_1_8)
-            }
-        }
-
-        compilations.named("functionalTest").configure {
-            compilerOptions.configure {
-                apiVersion.set(KotlinVersion.KOTLIN_1_8)
             }
         }
     }
