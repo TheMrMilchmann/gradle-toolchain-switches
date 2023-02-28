@@ -19,8 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import io.github.themrmilchmann.build.*
-import io.github.themrmilchmann.build.BuildType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.*
 
 plugins {
@@ -33,7 +33,7 @@ plugins {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion.set(JavaLanguageVersion.of(19))
     }
 
     withJavadocJar()
@@ -42,6 +42,33 @@ java {
 
 kotlin {
     explicitApi()
+
+    target {
+        compilations.all {
+            compilerOptions.configure {
+                apiVersion.set(KotlinVersion.KOTLIN_1_4)
+                languageVersion.set(KotlinVersion.KOTLIN_1_8)
+            }
+        }
+
+        compilations.named("main").configure {
+            compilerOptions.configure {
+                apiVersion.set(KotlinVersion.KOTLIN_1_4)
+            }
+        }
+
+        compilations.named("test").configure {
+            compilerOptions.configure {
+                apiVersion.set(KotlinVersion.KOTLIN_1_8)
+            }
+        }
+
+        compilations.named("functionalTest").configure {
+            compilerOptions.configure {
+                apiVersion.set(KotlinVersion.KOTLIN_1_8)
+            }
+        }
+    }
 }
 
 gradlePlugin {
@@ -69,8 +96,22 @@ samWithReceiver {
 }
 
 tasks {
-    named<Test>("test").configure {
+    withType<JavaCompile>().configureEach {
+        options.release.set(8)
+    }
+
+    withType<KotlinCompile>().configureEach {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
+        }
+    }
+
+    withType<Test>().configureEach {
         useJUnitPlatform()
+
+        javaLauncher.set(project.javaToolchains.launcherFor {
+            languageVersion.set(JavaLanguageVersion.of(8))
+        })
 
         systemProperty("junit.jupiter.execution.parallel.enabled", true)
         systemProperty("junit.jupiter.execution.parallel.mode.default", "concurrent")
@@ -100,8 +141,8 @@ publishing {
 }
 
 dependencies {
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.junit.jupiter.params)
-    testRuntimeOnly(libs.junit.jupiter.engine)
+    functionalTestImplementation(platform(libs.junit.bom))
+    functionalTestImplementation(libs.junit.jupiter.api)
+    functionalTestImplementation(libs.junit.jupiter.params)
+    functionalTestRuntimeOnly(libs.junit.jupiter.engine)
 }
