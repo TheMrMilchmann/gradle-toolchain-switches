@@ -82,15 +82,20 @@ public class ToolchainSwitchesPlugin : Plugin<Project> {
     ): Provider<T> {
         val versionProvider = providers.gradleProperty("$PROPERTY_PREFIX.$taskName.$PROPERTY_VERSION_SUFFIX")
 
+        @Suppress("ObjectLiteralToLambda")
         return versionProvider.flatMap { version ->
-            when (version) {
-                ENVIRONMENT_TOOLCHAIN_SELECTOR -> javaToolchains.factory {}
-                else -> javaToolchains.factory {
-                    languageVersion.set(JavaLanguageVersion.of(version))
+            javaToolchains.factory(object : Action<JavaToolchainSpec> {
+                override fun execute(spec: JavaToolchainSpec) {
+                    if (version != ENVIRONMENT_TOOLCHAIN_SELECTOR) {
+                        spec.languageVersion.set(JavaLanguageVersion.of(version))
+                    }
                 }
-            }
-        }.orElse(provider { java.toolchain }.flatMap { javaToolchains.getter(it) })
-            .orElse(javaToolchains.factory {})
+            })
+        }
+            .orElse(provider { java.toolchain }.flatMap { javaToolchains.getter(it) })
+            .orElse(javaToolchains.factory(object : Action<JavaToolchainSpec> {
+                override fun execute(spec: JavaToolchainSpec) {}
+            }))
     }
 
     private fun Project.inferCompiler(
