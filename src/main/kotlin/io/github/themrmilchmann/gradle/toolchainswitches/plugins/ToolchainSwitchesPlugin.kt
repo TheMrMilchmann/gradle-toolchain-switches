@@ -48,26 +48,26 @@ public class ToolchainSwitchesPlugin : Plugin<Project> {
 
     }
 
-    override fun apply(target: Project): Unit = applyTo(target) project@{
+    override fun apply(target: Project): Unit = applyTo(target) {
         plugins.withType(JavaBasePlugin::class.java) {
             val java = extensions.getByType(JavaPluginExtension::class.java)
             val javaToolchains = extensions.getByType(JavaToolchainService::class.java)
 
             applyTo(tasks) {
                 withType(JavaCompile::class.java).configureEach {
-                    javaCompiler.set(inferCompiler(name, defaultToolchain = java.toolchain, javaToolchains))
+                    javaCompiler.set(inferCompiler(taskName = name, java, javaToolchains))
                 }
 
                 withType(JavaExec::class.java).configureEach {
-                    javaLauncher.set(inferLauncher(name, defaultToolchain = java.toolchain, javaToolchains))
+                    javaLauncher.set(inferLauncher(name, java, javaToolchains))
                 }
 
                 withType(Javadoc::class.java).configureEach {
-                    javadocTool.set(inferJavadocTool(name, defaultToolchain = java.toolchain, javaToolchains))
+                    javadocTool.set(inferJavadocTool(name, java, javaToolchains))
                 }
 
                 withType(Test::class.java).configureEach {
-                    javaLauncher.set(inferLauncher(name, defaultToolchain = java.toolchain, javaToolchains))
+                    javaLauncher.set(inferLauncher(name, java, javaToolchains))
                 }
             }
         }
@@ -75,72 +75,64 @@ public class ToolchainSwitchesPlugin : Plugin<Project> {
 
     private fun <T> Project.infer(
         taskName: String,
-        defaultToolchain: JavaToolchainSpec,
+        java: JavaPluginExtension,
         javaToolchains: JavaToolchainService,
-        factory: JavaToolchainService.(Action<JavaToolchainSpec>) -> Provider<T>
-    ): Provider<T?> {
+        factory: JavaToolchainService.(Action<JavaToolchainSpec>) -> Provider<T>,
+        getter: JavaToolchainService.(JavaToolchainSpec) -> Provider<T>
+    ): Provider<T> {
         val versionProvider = providers.gradleProperty("$PROPERTY_PREFIX.$taskName.$PROPERTY_VERSION_SUFFIX")
 
-        return versionProvider.map { it.toJavaLanguageVersion() }
-            .orElse(defaultToolchain.languageVersion.map(JavaLanguageVersionSurrogate::ForVersion))
-            .flatMap { version -> when (version) {
-                is JavaLanguageVersionSurrogate.Env -> provider { null }
-                is JavaLanguageVersionSurrogate.ForVersion -> javaToolchains.factory {
-                    languageVersion.set(version.version)
+        return versionProvider.flatMap { version ->
+            when (version) {
+                ENVIRONMENT_TOOLCHAIN_SELECTOR -> javaToolchains.factory {}
+                else -> javaToolchains.factory {
+                    languageVersion.set(JavaLanguageVersion.of(version))
                 }
-            }}
+            }
+        }.orElse(provider { java.toolchain }.flatMap { javaToolchains.getter(it) })
+            .orElse(javaToolchains.factory {})
     }
 
     private fun Project.inferCompiler(
         taskName: String,
-        defaultToolchain: JavaToolchainSpec,
+        java: JavaPluginExtension,
         javaToolchains: JavaToolchainService
-    ): Provider<JavaCompiler?> {
+    ): Provider<JavaCompiler> {
         return infer(
             taskName,
-            defaultToolchain,
+            java,
             javaToolchains,
-            factory = JavaToolchainService::compilerFor
+            factory = JavaToolchainService::compilerFor,
+            getter = JavaToolchainService::compilerFor
         )
     }
 
     private fun Project.inferJavadocTool(
         taskName: String,
-        defaultToolchain: JavaToolchainSpec,
+        java: JavaPluginExtension,
         javaToolchains: JavaToolchainService
-    ): Provider<JavadocTool?> {
+    ): Provider<JavadocTool> {
         return infer(
             taskName,
-            defaultToolchain,
+            java,
             javaToolchains,
-            factory = JavaToolchainService::javadocToolFor
+            factory = JavaToolchainService::javadocToolFor,
+            getter = JavaToolchainService::javadocToolFor
         )
     }
 
     private fun Project.inferLauncher(
         taskName: String,
-        defaultToolchain: JavaToolchainSpec,
+        java: JavaPluginExtension,
         javaToolchains: JavaToolchainService
-    ): Provider<JavaLauncher?> {
+    ): Provider<JavaLauncher> {
         return infer(
             taskName,
-            defaultToolchain,
+            java,
             javaToolchains,
-            factory = JavaToolchainService::launcherFor
+            factory = JavaToolchainService::launcherFor,
+            getter = JavaToolchainService::launcherFor
         )
-    }
-
-    private fun String.toJavaLanguageVersion(): JavaLanguageVersionSurrogate = when (this) {
-        ENVIRONMENT_TOOLCHAIN_SELECTOR -> JavaLanguageVersionSurrogate.Env
-        else -> JavaLanguageVersionSurrogate.ForVersion(JavaLanguageVersion.of(this))
-    }
-
-    private sealed class JavaLanguageVersionSurrogate {
-
-        object Env : JavaLanguageVersionSurrogate()
-
-        class ForVersion(val version: JavaLanguageVersion): JavaLanguageVersionSurrogate()
-
     }
 
 }
