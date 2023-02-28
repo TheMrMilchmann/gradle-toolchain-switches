@@ -71,13 +71,13 @@ tasks {
     }
 }
 
-val emptyJar = tasks.create<Jar>("emptyJar") {
-    destinationDirectory.set(buildDir.resolve("emptyJar"))
+val emptyJar = tasks.register<Jar>("emptyJar") {
+    destinationDirectory.set(layout.buildDirectory.dir("emptyJar"))
     archiveBaseName.set("io.github.themrmilchmann.toolchainswitches.gradle.plugin")
 }
 
 publishing {
-    publications.withType<MavenPublication> {
+    publications.withType<MavenPublication>().configureEach {
         if (name == "toolchainswitchesPluginMarkerMaven") {
             artifact(emptyJar)
             artifact(emptyJar) { classifier = "javadoc" }
