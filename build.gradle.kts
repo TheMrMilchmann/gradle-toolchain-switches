@@ -99,9 +99,24 @@ tasks {
     withType<Test>().configureEach {
         useJUnitPlatform()
 
-        javaLauncher.set(project.javaToolchains.launcherFor {
-            languageVersion.set(JavaLanguageVersion.of(8))
-        })
+        /*
+         * This does not work because there is no way for the plugin to respect
+         * this convention while keeping the configuration lazy. In practice,
+         * this means that the task defaults to the project-wide toolchain while
+         * it should default to a toolchain for Java 8.
+         *
+         * We work around this by exposing a few experimental functions that can
+         * be used to configure tools (taking into account properties) starting
+         * in 0.3.0.
+         *
+         * TODO Adapt this task to use 0.3.0's toolchain configuration
+         *      functions.
+         *
+         * See https://github.com/gradle/gradle/issues/14768
+         */
+//        javaLauncher.convention(project.javaToolchains.launcherFor {
+//            languageVersion.set(JavaLanguageVersion.of(8))
+//        })
 
         systemProperty("junit.jupiter.execution.parallel.enabled", true)
         systemProperty("junit.jupiter.execution.parallel.mode.default", "concurrent")
