@@ -21,20 +21,15 @@
  */
 package io.github.themrmilchmann.gradle.toolchainswitches.plugins
 
+import io.github.themrmilchmann.gradle.toolchainswitches.inferredToolImpl
 import io.github.themrmilchmann.gradle.toolchainswitches.internal.utils.*
 import org.gradle.api.*
 import org.gradle.api.plugins.JavaPluginExtension
-import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.api.tasks.testing.*
-import org.gradle.jvm.toolchain.JavaCompiler
-import org.gradle.jvm.toolchain.JavaLanguageVersion
-import org.gradle.jvm.toolchain.JavaLauncher
 import org.gradle.jvm.toolchain.JavaToolchainService
-import org.gradle.jvm.toolchain.JavaToolchainSpec
-import org.gradle.jvm.toolchain.JavadocTool
 
 public class ToolchainSwitchesPlugin : Plugin<Project> {
 
@@ -54,89 +49,38 @@ public class ToolchainSwitchesPlugin : Plugin<Project> {
 
             applyTo(tasks) {
                 withType(JavaCompile::class.java).configureEach {
-                    javaCompiler.set(inferCompiler(taskName = name, java, javaToolchains))
+                    javaCompiler.set(inferredToolImpl(
+                        javaToolchains,
+                        factory = JavaToolchainService::compilerFor,
+                        default = project.provider { java.toolchain }.flatMap { javaToolchains.compilerFor(it) }
+                    ))
                 }
 
                 withType(JavaExec::class.java).configureEach {
-                    javaLauncher.set(inferLauncher(name, java, javaToolchains))
+                    javaLauncher.set(inferredToolImpl(
+                        javaToolchains,
+                        factory = JavaToolchainService::launcherFor,
+                        default = project.provider { java.toolchain }.flatMap { javaToolchains.launcherFor(it) }
+                    ))
                 }
 
                 withType(Javadoc::class.java).configureEach {
-                    javadocTool.set(inferJavadocTool(name, java, javaToolchains))
+                    javadocTool.set(inferredToolImpl(
+                        javaToolchains,
+                        factory = JavaToolchainService::javadocToolFor,
+                        default = project.provider { java.toolchain }.flatMap { javaToolchains.javadocToolFor(it) }
+                    ))
                 }
 
                 withType(Test::class.java).configureEach {
-                    javaLauncher.set(inferLauncher(name, java, javaToolchains))
+                    javaLauncher.set(inferredToolImpl(
+                        javaToolchains,
+                        factory = JavaToolchainService::launcherFor,
+                        default = project.provider { java.toolchain }.flatMap { javaToolchains.launcherFor(it) }
+                    ))
                 }
             }
         }
-    }
-
-    private fun <T> Project.infer(
-        taskName: String,
-        java: JavaPluginExtension,
-        javaToolchains: JavaToolchainService,
-        factory: JavaToolchainService.(Action<JavaToolchainSpec>) -> Provider<T>,
-        getter: JavaToolchainService.(JavaToolchainSpec) -> Provider<T>
-    ): Provider<T> {
-        val versionProvider = providers.gradleProperty("$PROPERTY_PREFIX.$taskName.$PROPERTY_VERSION_SUFFIX")
-
-        @Suppress("ObjectLiteralToLambda")
-        return versionProvider.flatMap { version ->
-            javaToolchains.factory(object : Action<JavaToolchainSpec> {
-                override fun execute(spec: JavaToolchainSpec) {
-                    if (version != ENVIRONMENT_TOOLCHAIN_SELECTOR) {
-                        spec.languageVersion.set(JavaLanguageVersion.of(version))
-                    }
-                }
-            })
-        }
-            .orElse(provider { java.toolchain }.flatMap { javaToolchains.getter(it) })
-            .orElse(javaToolchains.factory(object : Action<JavaToolchainSpec> {
-                override fun execute(spec: JavaToolchainSpec) {}
-            }))
-    }
-
-    private fun Project.inferCompiler(
-        taskName: String,
-        java: JavaPluginExtension,
-        javaToolchains: JavaToolchainService
-    ): Provider<JavaCompiler> {
-        return infer(
-            taskName,
-            java,
-            javaToolchains,
-            factory = JavaToolchainService::compilerFor,
-            getter = JavaToolchainService::compilerFor
-        )
-    }
-
-    private fun Project.inferJavadocTool(
-        taskName: String,
-        java: JavaPluginExtension,
-        javaToolchains: JavaToolchainService
-    ): Provider<JavadocTool> {
-        return infer(
-            taskName,
-            java,
-            javaToolchains,
-            factory = JavaToolchainService::javadocToolFor,
-            getter = JavaToolchainService::javadocToolFor
-        )
-    }
-
-    private fun Project.inferLauncher(
-        taskName: String,
-        java: JavaPluginExtension,
-        javaToolchains: JavaToolchainService
-    ): Provider<JavaLauncher> {
-        return infer(
-            taskName,
-            java,
-            javaToolchains,
-            factory = JavaToolchainService::launcherFor,
-            getter = JavaToolchainService::launcherFor
-        )
     }
 
 }
