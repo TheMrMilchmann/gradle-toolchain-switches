@@ -1,4 +1,5 @@
 [versions]
+gradle-toolchain-switches = "0.2.0"
 nokee-gradle-plugin-dev = "1.6.9"
 junit = "5.9.2"
 kotlin = "1.8.10"
@@ -14,11 +15,14 @@ junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", vers
 
 
 [plugins]
+# com.gradle.plugin-publish - plugin-publish
+plugin-publish = { id = "com.gradle.plugin-publish", version.ref = "plugin-publish" }
+
 # dev.gradleplugins - Nokee Gradle Plugin Development Plugins
 gradle-plugin-functional-test = { id = "dev.gradleplugins.gradle-plugin-functional-test", version.ref = "nokee-gradle-plugin-dev" }
 
-# com.gradle.plugin-publish - plugin-publish
-plugin-publish = { id = "com.gradle.plugin-publish", version.ref = "plugin-publish" }
+# io.github.themrmilchmann.gradle.toolchainswitches:gradle-toolchain-switches - Gradle Toolchain Switches Plugin
+gradle-toolchain-switches = { id = "io.github.themrmilchmann.toolchain-switches", version.ref = "gradle-toolchain-switches" }
 
 # org.jetbrains.kotlin - Kotlin
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

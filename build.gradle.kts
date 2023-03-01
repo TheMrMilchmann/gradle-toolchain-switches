@@ -28,6 +28,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.plugin.samwithreceiver)
     alias(libs.plugins.gradle.plugin.functional.test)
+    alias(libs.plugins.gradle.toolchain.switches)
     alias(libs.plugins.plugin.publish)
     id("io.github.themrmilchmann.maven-publish-conventions")
 }
