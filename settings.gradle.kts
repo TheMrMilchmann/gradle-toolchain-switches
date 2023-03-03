@@ -32,3 +32,5 @@ plugins {
 }
 
 rootProject.name = "gradle-toolchain-switches"
+
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
