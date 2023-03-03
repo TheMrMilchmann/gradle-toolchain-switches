@@ -6,15 +6,22 @@
 ![Gradle](https://img.shields.io/badge/Gradle-7.4-green.svg?style=flat-square&color=1ba8cb&logo=Gradle)
 ![Java](https://img.shields.io/badge/Java-8-green.svg?style=flat-square&color=b07219&logo=Java)
 
-A Gradle plugin that adds command line parameters that may be used to
-dynamically switch between toolchains for specific tasks.
+A Gradle plugin that enables dynamic configuration of toolchains for specific
+tasks via Gradle properties.
 
 
 # Usage
 
-The plugin configures `JavaCompile`, `JavaExec` and `Javadoc` tasks to use to
-look up the value of the `toolchain.${taskName}.version` property. Properties
-can be set by specifying the `-P${propertyName}` command line parameter.
+The plugin provides the `TaskExt` class which defines several methods that can
+be used to infer a tool for a specific task. Gradle properties can be used to
+configure the selected tool. The algorithm currently considers the following
+properties:
+
+- `toolchain.${taskName}.version` – the language version for the toolchain
+
+The plugin automatically sets up `JavaCompile`, `JavaExec`, `Javadoc`, and
+`Test` tasks to respect the properties by default. A Property can, for example,
+be set by specifying a `-P${propertyName}` command line parameter.
 
     gradlew build -Ptoolchain.test.version=17
 
@@ -32,6 +39,7 @@ the runtime that is used to execute the build.
 
 | Gradle | Minimal plugin version |
 |--------|------------------------|
+| 8.0    | 0.3.0                  |
 | 7.4    | 0.1.0                  |
 
 
