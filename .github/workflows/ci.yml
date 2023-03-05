@@ -88,7 +88,7 @@ jobs:
   cleanup:
     name: Cleanup
     if: ${{ always() }}
-    needs: ['check']
+    needs: check
     runs-on: ubuntu-latest
     steps:
       - name: Cleanup
