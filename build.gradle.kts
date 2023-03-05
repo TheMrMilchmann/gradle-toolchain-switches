@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.gradle.tasks.*
 
 @Suppress("DSL_SCOPE_VIOLATION") // See https://github.com/gradle/gradle/issues/22797
 plugins {
+    alias(libs.plugins.binary.compatibility.validator)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.plugin.samwithreceiver)
     alias(libs.plugins.gradle.plugin.functional.test)
