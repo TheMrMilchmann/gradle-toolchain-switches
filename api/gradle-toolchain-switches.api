@@ -1,0 +1,27 @@
+public abstract interface annotation class io/github/themrmilchmann/gradle/toolchainswitches/ExperimentalToolchainSwitchesApi : java/lang/annotation/Annotation {
+}
+
+public final class io/github/themrmilchmann/gradle/toolchainswitches/TaskExtKt {
+	public static final fun inferLauncher (Lorg/gradle/api/Task;Lorg/gradle/api/provider/Provider;)Lorg/gradle/api/provider/Provider;
+	public static synthetic fun inferLauncher$default (Lorg/gradle/api/Task;Lorg/gradle/api/provider/Provider;ILjava/lang/Object;)Lorg/gradle/api/provider/Provider;
+	public static final fun inferredCompiler (Lorg/gradle/api/Task;Lorg/gradle/api/provider/Provider;)Lorg/gradle/api/provider/Provider;
+	public static synthetic fun inferredCompiler$default (Lorg/gradle/api/Task;Lorg/gradle/api/provider/Provider;ILjava/lang/Object;)Lorg/gradle/api/provider/Provider;
+	public static final fun inferredJavadocTool (Lorg/gradle/api/Task;Lorg/gradle/api/provider/Provider;)Lorg/gradle/api/provider/Provider;
+	public static synthetic fun inferredJavadocTool$default (Lorg/gradle/api/Task;Lorg/gradle/api/provider/Provider;ILjava/lang/Object;)Lorg/gradle/api/provider/Provider;
+	public static final fun inferredTool (Lorg/gradle/api/Task;Lkotlin/jvm/functions/Function2;Lorg/gradle/api/provider/Provider;)Lorg/gradle/api/provider/Provider;
+	public static synthetic fun inferredTool$default (Lorg/gradle/api/Task;Lkotlin/jvm/functions/Function2;Lorg/gradle/api/provider/Provider;ILjava/lang/Object;)Lorg/gradle/api/provider/Provider;
+}
+
+public final class io/github/themrmilchmann/gradle/toolchainswitches/plugins/ToolchainSwitchesPlugin : org/gradle/api/Plugin {
+	public static final field Companion Lio/github/themrmilchmann/gradle/toolchainswitches/plugins/ToolchainSwitchesPlugin$Companion;
+	public static final field ENVIRONMENT_TOOLCHAIN_SELECTOR Ljava/lang/String;
+	public static final field PROPERTY_PREFIX Ljava/lang/String;
+	public static final field PROPERTY_VERSION_SUFFIX Ljava/lang/String;
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public final class io/github/themrmilchmann/gradle/toolchainswitches/plugins/ToolchainSwitchesPlugin$Companion {
+}
+
