@@ -74,7 +74,7 @@ gradlePlugin {
         create("toolchainswitches") {
             id = "io.github.themrmilchmann.toolchain-switches"
             displayName = "Gradle Toolchain Switches Plugin"
-            description = "A Gradle plugin that enables dynamic configuration of toolchains for specific tasks via Gradle properties."
+            description = "A Gradle plugin that enables dynamic configuration of toolchains for specific tasks via project properties."
             tags.addAll("cli", "configuration", "java", "toolchains")
 
             implementationClass = "io.github.themrmilchmann.gradle.toolchainswitches.plugins.ToolchainSwitchesPlugin"
@@ -141,7 +141,7 @@ publishing {
 
         pom {
             name.set("Gradle Toolchain Switches Plugin")
-            description.set("A Gradle plugin that adds command line parameters that may be used to dynamically switch between toolchains for specific tasks.")
+            description.set("A Gradle plugin that enables dynamic configuration of toolchains for specific tasks via project properties.")
         }
     }
 }

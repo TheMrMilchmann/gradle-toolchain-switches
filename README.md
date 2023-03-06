@@ -7,7 +7,7 @@
 ![Java](https://img.shields.io/badge/Java-8-green.svg?style=flat-square&color=b07219&logo=Java)
 
 A Gradle plugin that enables dynamic configuration of toolchains for specific
-tasks via Gradle properties.
+tasks via project properties.
 
 
 # Usage
