@@ -50,6 +50,7 @@ class ToolchainSwitchesPluginTest {
             // See https://docs.gradle.org/current/userguide/compatibility.html
             val javaVersion = JavaVersion.current()
 
+            add("8.1")
             add("8.0.2")
             add("8.0.1")
             add("8.0")
