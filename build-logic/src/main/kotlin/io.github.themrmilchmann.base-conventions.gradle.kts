@@ -24,7 +24,7 @@ import io.github.themrmilchmann.build.BuildType
 
 group = "io.github.themrmilchmann.gradle.toolchainswitches"
 
-val nextVersion = "0.3.0"
+val nextVersion = "0.4.0"
 version = when (deployment.type) {
     BuildType.SNAPSHOT -> "$nextVersion-SNAPSHOT"
     else -> nextVersion
