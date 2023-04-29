@@ -49,7 +49,7 @@ kotlin {
     explicitApi()
 
     target {
-        compilations.all {
+        compilations.configureEach {
             compilerOptions.configure {
                 apiVersion.set(KotlinVersion.KOTLIN_1_8)
                 languageVersion.set(KotlinVersion.KOTLIN_1_8)
@@ -73,7 +73,7 @@ gradlePlugin {
     vcsUrl.set("https://github.com/TheMrMilchmann/gradle-toolchain-switches.git")
 
     plugins {
-        create("toolchainswitches") {
+        register("toolchainswitches") {
             id = "io.github.themrmilchmann.toolchain-switches"
             displayName = "Gradle Toolchain Switches Plugin"
             description = "A Gradle plugin that enables dynamic configuration of toolchains for specific tasks via project properties."
