@@ -40,7 +40,7 @@ group = "io.github.themrmilchmann.gradle.toolchainswitches"
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(19))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 
     withJavadocJar()
