@@ -19,13 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import io.github.themrmilchmann.build.*
-import io.github.themrmilchmann.build.BuildType
-
 plugins {
-    signing
-    `maven-publish`
     id("io.github.themrmilchmann.base-conventions")
+    `maven-publish`
+    signing
 }
 
 publishing {
@@ -73,6 +70,12 @@ publishing {
 }
 
 signing {
-    isRequired = (deployment.type === BuildType.RELEASE)
+    // Only require signing when publishing to a non-local maven repository
+    setRequired { gradle.taskGraph.allTasks.any { it is PublishToMavenRepository } }
+
+    val signingKey: String? by project
+    val signingPassword: String? by project
+    useInMemoryPgpKeys(signingKey, signingPassword)
+
     sign(publishing.publications)
 }

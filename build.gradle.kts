@@ -35,6 +35,9 @@ plugins {
     id("io.github.themrmilchmann.maven-publish-conventions")
 }
 
+// Workaround for https://github.com/gradle/gradle/issues/10921
+group = "io.github.themrmilchmann.gradle.toolchainswitches"
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(19))
