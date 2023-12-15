@@ -115,6 +115,10 @@ tasks {
 
         environment("junitVersion", libs.versions.junit.get())
     }
+
+    validatePlugins {
+        enableStricterValidation = true
+    }
 }
 
 val emptyJar = tasks.register<Jar>("emptyJar") {
