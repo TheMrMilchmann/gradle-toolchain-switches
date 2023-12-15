@@ -50,26 +50,31 @@ class ToolchainSwitchesPluginTest {
             // See https://docs.gradle.org/current/userguide/compatibility.html
             val javaVersion = JavaVersion.current()
 
+            add("8.5")
+
+            if (javaVersion.majorVersion >= "21") return@buildList
+
+            add("8.4")
+            add("8.3")
+
+            @Suppress("UnstableApiUsage")
+            if (javaVersion >= JavaVersion.VERSION_20) return@buildList
+
+            add("8.2.1")
             add("8.1.1")
             add("8.1")
-            add("8.0.2")
-            add("8.0.1")
             add("8.0")
-            add("7.6.1")
-            add("7.6")
+            add("7.6.3")
 
             @Suppress("UnstableApiUsage")
             if (javaVersion >= JavaVersion.VERSION_19) return@buildList
 
             add("7.5.1")
-            add("7.5")
 
             @Suppress("UnstableApiUsage")
             if (javaVersion >= JavaVersion.VERSION_18) return@buildList
 
             add("7.4.2")
-            add("7.4.1")
-            add("7.4")
         }
 
     }
