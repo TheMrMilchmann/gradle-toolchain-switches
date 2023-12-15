@@ -40,7 +40,7 @@ group = "io.github.themrmilchmann.gradle.toolchainswitches"
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion = JavaLanguageVersion.of(21)
     }
 
     withJavadocJar()
@@ -53,15 +53,15 @@ kotlin {
     target {
         compilations.configureEach {
             compilerOptions.configure {
-                apiVersion.set(KotlinVersion.KOTLIN_1_8)
-                languageVersion.set(KotlinVersion.KOTLIN_1_8)
+                apiVersion = KotlinVersion.KOTLIN_1_8
+                languageVersion = KotlinVersion.KOTLIN_1_8
             }
         }
 
         compilations.named("main").configure {
             compilerOptions.configure {
                 @Suppress("DEPRECATION")
-                apiVersion.set(KotlinVersion.KOTLIN_1_4)
+                apiVersion = KotlinVersion.KOTLIN_1_4
             }
         }
     }
@@ -69,11 +69,11 @@ kotlin {
 
 gradlePlugin {
     compatibility {
-        minimumGradleVersion.set("7.4")
+        minimumGradleVersion = "7.4"
     }
 
-    website.set("https://github.com/TheMrMilchmann/gradle-toolchain-switches")
-    vcsUrl.set("https://github.com/TheMrMilchmann/gradle-toolchain-switches.git")
+    website = "https://github.com/TheMrMilchmann/gradle-toolchain-switches"
+    vcsUrl = "https://github.com/TheMrMilchmann/gradle-toolchain-switches.git"
 
     plugins {
         register("toolchainswitches") {
@@ -93,12 +93,12 @@ samWithReceiver {
 
 tasks {
     withType<JavaCompile>().configureEach {
-        options.release.set(8)
+        options.release = 8
     }
 
     withType<KotlinCompile>().configureEach {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_1_8)
+            jvmTarget = JvmTarget.JVM_1_8
         }
     }
 
@@ -122,8 +122,8 @@ tasks {
 }
 
 val emptyJar = tasks.register<Jar>("emptyJar") {
-    destinationDirectory.set(layout.buildDirectory.dir("emptyJar"))
-    archiveBaseName.set("io.github.themrmilchmann.toolchainswitches.gradle.plugin")
+    destinationDirectory = layout.buildDirectory.dir("emptyJar")
+    archiveBaseName = "io.github.themrmilchmann.toolchainswitches.gradle.plugin"
 }
 
 publishing {
@@ -135,8 +135,8 @@ publishing {
         }
 
         pom {
-            name.set("Gradle Toolchain Switches Plugin")
-            description.set("A Gradle plugin that enables dynamic configuration of toolchains for specific tasks via project properties.")
+            name = "Gradle Toolchain Switches Plugin"
+            description = "A Gradle plugin that enables dynamic configuration of toolchains for specific tasks via project properties."
         }
     }
 }

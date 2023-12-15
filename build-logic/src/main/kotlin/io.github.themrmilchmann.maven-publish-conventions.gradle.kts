@@ -45,32 +45,32 @@ publishing {
     }
     publications.withType<MavenPublication>().configureEach {
         pom {
-            name.set(project.name)
-            url.set("https://github.com/TheMrMilchmann/gradle-toolchain-switches")
+            name = project.name
+            url = "https://github.com/TheMrMilchmann/gradle-toolchain-switches"
 
             licenses {
                 licenses {
                     license {
-                        name.set("MIT")
-                        url.set("https://github.com/TheMrMilchmann/gradle-toolchain-switches/blob/master/LICENSE")
-                        distribution.set("repo")
+                        name = "MIT"
+                        url = "https://github.com/TheMrMilchmann/gradle-toolchain-switches/blob/master/LICENSE"
+                        distribution = "repo"
                     }
                 }
             }
 
             developers {
                 developer {
-                    id.set("TheMrMilchmann")
-                    name.set("Leon Linhart")
-                    email.set("themrmilchmann@gmail.com")
-                    url.set("https://github.com/TheMrMilchmann")
+                    id = "TheMrMilchmann"
+                    name = "Leon Linhart"
+                    email = "themrmilchmann@gmail.com"
+                    url = "https://github.com/TheMrMilchmann"
                 }
             }
 
             scm {
-                connection.set("scm:git:git://github.com/TheMrMilchmann/gradle-toolchain-switches.git")
-                developerConnection.set("scm:git:git://github.com/TheMrMilchmann/gradle-toolchain-switches.git")
-                url.set("https://github.com/TheMrMilchmann/gradle-toolchain-switches.git")
+                connection = "scm:git:git://github.com/TheMrMilchmann/gradle-toolchain-switches.git"
+                developerConnection = "scm:git:git://github.com/TheMrMilchmann/gradle-toolchain-switches.git"
+                url = "https://github.com/TheMrMilchmann/gradle-toolchain-switches.git"
             }
         }
     }
