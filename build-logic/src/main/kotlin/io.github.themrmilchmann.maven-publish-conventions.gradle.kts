@@ -27,12 +27,19 @@ plugins {
 
 publishing {
     repositories {
-        maven {
-            url = uri(deployment.repo)
+        val sonatypeBaseUrl: String? by project
+        val sonatypeUsername: String? by project
+        val sonatypePassword: String? by project
+        val stagingRepositoryId: String? by project
 
-            credentials {
-                username = deployment.user
-                password = deployment.password
+        if (sonatypeBaseUrl != null && sonatypeUsername != null && sonatypePassword != null && stagingRepositoryId != null) {
+            maven {
+                url = uri("$sonatypeBaseUrl/service/local/staging/deployByRepositoryId/$stagingRepositoryId/")
+
+                credentials {
+                    username = sonatypeUsername
+                    password = sonatypePassword
+                }
             }
         }
     }
