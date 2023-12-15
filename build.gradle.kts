@@ -116,6 +116,13 @@ tasks {
         environment("junitVersion", libs.versions.junit.get())
     }
 
+    withType<Jar>().configureEach {
+        isPreserveFileTimestamps = false
+        isReproducibleFileOrder = true
+
+        includeEmptyDirs = false
+    }
+
     validatePlugins {
         enableStricterValidation = true
     }
